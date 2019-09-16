@@ -17,7 +17,7 @@
 <meta property="og:site_name" content="MrDing的大数据之路">
 <meta property="og:description" content="前言 前期准备: a. git账号及git for windows客户端 b. node.js安装并添加到系统环境变量  搭建github博客 2.1 创建仓库 ​    新建一个名为 git用户名.github.io 的仓库,这也是博客的访问地址 2.2 绑定域名 ​    a. 先到云服务商如阿里云购买一个域名,根据域名带不带www配置方式也会有所不同 ​    b. 若不带www,需要先p">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-14T04:25:30.845Z">
+<meta property="og:updated_time" content="2019-09-16T17:54:50.963Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo搭建个人博客及多终端同步使用">
 <meta name="twitter:description" content="前言 前期准备: a. git账号及git for windows客户端 b. node.js安装并添加到系统环境变量  搭建github博客 2.1 创建仓库 ​    新建一个名为 git用户名.github.io 的仓库,这也是博客的访问地址 2.2 绑定域名 ​    a. 先到云服务商如阿里云购买一个域名,根据域名带不带www配置方式也会有所不同 ​    b. 若不带www,需要先p">
@@ -317,14 +317,14 @@
 </li>
 <li><p>多终端同步使用</p>
 <p>5.1 添加hexo到git仓库</p>
-<p>​    a. 进入hexo的初始化目录的themes目录下,删除themes下的所有<code>.git</code> 和<code>.gitignore</code> 文件</p>
-<p>​    b. 进入hexo初始化目录,添加 /.deploy_git, /public 到.gitignore文件末尾,一个一行</p>
+<p>​    a. 进入hexo的初始化目录下,删除所有<code>.git</code> 文件包括子目录下的</p>
+<p>​    b. 远程创建一个私人仓库</p>
 <p>​    c. 打开git bash,初始化本地仓库<code>git init</code> ,将本地仓库与远程仓库对接</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#将hexo作为git用户名.github.io项目的hexo分支提交,步骤如下</span></span><br><span class="line">git remote add origin git@github.com:git用户名/git用户名.github.io.git</span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">"commit hexo config"</span></span><br><span class="line">git branch hexo </span><br><span class="line">git checkout hexo</span><br><span class="line">git push origin hexo</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#将整个hexo项目提交到新的私人仓库</span></span><br><span class="line">git remote add origin 新私人仓库地址</span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">"commit hexo config"</span></span><br><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
 
 <p>5.2 其他终端使用</p>
 <p>​    同样需要安装git,node.js,hexo,打开git bash,然后克隆 git用户名.github.io 项目到本地,切换到hexo分支,之后正常新建博客,发布到hexo,同步更新至git</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#克隆hexo分支</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/git用户名/git用户名.github.io.git</span><br><span class="line">git checkout hexo</span><br><span class="line"><span class="comment">#安装依赖</span></span><br><span class="line">npm install</span><br><span class="line"></span><br><span class="line"><span class="comment">#新建博客</span></span><br><span class="line">hexo new <span class="string">"博客标题"</span> <span class="comment">#之后编辑source下md文件补充正文</span></span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br><span class="line"></span><br><span class="line"><span class="comment">#同步更新至git</span></span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">"new blog xxx"</span></span><br><span class="line">git push origin hexo</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#克隆新的私人仓库</span></span><br><span class="line">git <span class="built_in">clone</span> 新私人仓库地址</span><br><span class="line"><span class="comment">#安装依赖</span></span><br><span class="line">npm install</span><br><span class="line"></span><br><span class="line"><span class="comment">#新建博客</span></span><br><span class="line">hexo new <span class="string">"博客标题"</span> <span class="comment">#之后编辑source下md文件补充正文</span></span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br><span class="line"></span><br><span class="line"><span class="comment">#同步更新至git</span></span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">"new blog xxx"</span></span><br><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
 
 <p>​</p>
 </li>
@@ -340,7 +340,7 @@
         <p><span>本文标题:</span><a  href="/2019/09/13/Hexo搭建个人博客及多终端同步使用/">Hexo搭建个人博客及多终端同步使用</a></p>
         <p><span>文章作者:</span><a  href="/" title="访问 Hunter Ding 的个人博客">Hunter Ding</a></p>
         <p><span>发布时间:</span>2019年09月13日 - 22时50分</p>
-        <p><span>最后更新:</span>2019年09月14日 - 12时25分</p>
+        <p><span>最后更新:</span>2019年09月17日 - 01时54分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2019/09/13/Hexo搭建个人博客及多终端同步使用/" title="Hexo搭建个人博客及多终端同步使用">http://DoomBoom.github.io/archives/2019/09/13/Hexo搭建个人博客及多终端同步使用/</a>
             <span class="copy-path" data-clipboard-text="原文: http://DoomBoom.github.io/archives/2019/09/13/Hexo搭建个人博客及多终端同步使用/　　作者: Hunter Ding" title=""></span>
