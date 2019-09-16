@@ -276,8 +276,8 @@
 <li><p>解题思路</p>
 <p>通过一个变量carry保存每次运算的进位值,同时作为下次运算的初始值.</p>
 <p>a.因为需要不断的迭代计算,为了不破坏原始数据和结果集,需要对两个ListNode以及结果ListNode创建额外的ListNode对象引用;</p>
-<p>b.每计算一次,将两个ListNode对象的当前值以及carry值相加得到结果的当前值;</p>
-<p>c.将引用对象的next值赋值给自己,进位值赋值给carry,重复b,直到两个对象的next值和carry均为空。</p>
+<p>b.将两个ListNode对象的当前值以及carry值相加得到当前计算的总和,总和进位的值赋给carry,个位数为结果的当前值;</p>
+<p>c.将用于计算的引用对象的next值赋值给自己,用于结果的引用对象的next初始值设为carry赋给自己,重复b,直到两个计算对象的next值和carry均为空。</p>
 </li>
 <li><p>代码</p>
 <p>a. java code</p>

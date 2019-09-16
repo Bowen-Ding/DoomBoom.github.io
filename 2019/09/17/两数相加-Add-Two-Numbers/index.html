@@ -17,7 +17,7 @@
 <meta property="og:site_name" content="MrDing的大数据之路">
 <meta property="og:description" content="两数相加 Add Two Numbers leetcode 第二题   题目描述 1234567891011121314151617181920212223242526/*给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的每个节点只能存储 一位 数字。如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。您可以假设除了数字 0 之外">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-16T17:37:31.513Z">
+<meta property="og:updated_time" content="2019-09-16T17:42:34.933Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="两数相加(Add Two Numbers)">
 <meta name="twitter:description" content="两数相加 Add Two Numbers leetcode 第二题   题目描述 1234567891011121314151617181920212223242526/*给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的每个节点只能存储 一位 数字。如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。您可以假设除了数字 0 之外">
@@ -287,8 +287,8 @@
 <li><p>解题思路</p>
 <p>通过一个变量carry保存每次运算的进位值,同时作为下次运算的初始值.</p>
 <p>a.因为需要不断的迭代计算,为了不破坏原始数据和结果集,需要对两个ListNode以及结果ListNode创建额外的ListNode对象引用;</p>
-<p>b.每计算一次,将两个ListNode对象的当前值以及carry值相加得到结果的当前值;</p>
-<p>c.将引用对象的next值赋值给自己,进位值赋值给carry,重复b,直到两个对象的next值和carry均为空。</p>
+<p>b.将两个ListNode对象的当前值以及carry值相加得到当前计算的总和,总和进位的值赋给carry,个位数为结果的当前值;</p>
+<p>c.将用于计算的引用对象的next值赋值给自己,用于结果的引用对象的next初始值设为carry赋给自己,重复b,直到两个计算对象的next值和carry均为空。</p>
 </li>
 <li><p>代码</p>
 <p>a. java code</p>
@@ -311,7 +311,7 @@
         <p><span>本文标题:</span><a  href="/2019/09/17/两数相加-Add-Two-Numbers/">两数相加(Add Two Numbers)</a></p>
         <p><span>文章作者:</span><a  href="/" title="访问 Hunter Ding 的个人博客">Hunter Ding</a></p>
         <p><span>发布时间:</span>2019年09月17日 - 01时21分</p>
-        <p><span>最后更新:</span>2019年09月17日 - 01时37分</p>
+        <p><span>最后更新:</span>2019年09月17日 - 01时42分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2019/09/17/两数相加-Add-Two-Numbers/" title="两数相加(Add Two Numbers)">http://DoomBoom.github.io/archives/2019/09/17/两数相加-Add-Two-Numbers/</a>
             <span class="copy-path" data-clipboard-text="原文: http://DoomBoom.github.io/archives/2019/09/17/两数相加-Add-Two-Numbers/　　作者: Hunter Ding" title=""></span>
