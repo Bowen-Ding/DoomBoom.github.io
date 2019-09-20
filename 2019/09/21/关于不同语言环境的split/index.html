@@ -9,18 +9,18 @@
   
   <title>关于不同语言环境的split | MrDing的大数据之路</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="问题发现 今天看到一个hive环境下用split解析json取特定字段的值的案例,群里的小伙伴用java测试split发现结果不一致.案例可以简化为如下: ​    a. split( “a&amp;quot;:&amp;quot;“ , “&amp;quot;:&amp;quot;“ ) 的结果在java环境得到的数组只有一个元素: [ “a” ],而在python和hive环境下得到的数组都是2个元素: [ “a” , “">
+  <meta name="description" content="问题发现 今天看到一个hive环境下用split解析json取特定字段的值的案例,群里的小伙伴用java测试split发现结果不一致.案例可以简化为如下: ​    a. split( &amp;#39;a&amp;quot;:&amp;quot;&amp;#39; , &amp;#39;&amp;quot;:&amp;quot;&amp;#39; ) 的结果在java环境得到的数组只有一个元素: [ “a” ],而在python和hive环境下得到的数组都">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于不同语言环境的split">
 <meta property="og:url" content="http://DoomBoom.github.io/archives/2019/09/21/关于不同语言环境的split/index.html">
 <meta property="og:site_name" content="MrDing的大数据之路">
-<meta property="og:description" content="问题发现 今天看到一个hive环境下用split解析json取特定字段的值的案例,群里的小伙伴用java测试split发现结果不一致.案例可以简化为如下: ​    a. split( “a&amp;quot;:&amp;quot;“ , “&amp;quot;:&amp;quot;“ ) 的结果在java环境得到的数组只有一个元素: [ “a” ],而在python和hive环境下得到的数组都是2个元素: [ “a” , “">
+<meta property="og:description" content="问题发现 今天看到一个hive环境下用split解析json取特定字段的值的案例,群里的小伙伴用java测试split发现结果不一致.案例可以简化为如下: ​    a. split( &amp;#39;a&amp;quot;:&amp;quot;&amp;#39; , &amp;#39;&amp;quot;:&amp;quot;&amp;#39; ) 的结果在java环境得到的数组只有一个元素: [ “a” ],而在python和hive环境下得到的数组都">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-20T17:19:36.304Z">
+<meta property="og:updated_time" content="2019-09-20T17:24:29.682Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于不同语言环境的split">
-<meta name="twitter:description" content="问题发现 今天看到一个hive环境下用split解析json取特定字段的值的案例,群里的小伙伴用java测试split发现结果不一致.案例可以简化为如下: ​    a. split( “a&amp;quot;:&amp;quot;“ , “&amp;quot;:&amp;quot;“ ) 的结果在java环境得到的数组只有一个元素: [ “a” ],而在python和hive环境下得到的数组都是2个元素: [ “a” , “">
+<meta name="twitter:description" content="问题发现 今天看到一个hive环境下用split解析json取特定字段的值的案例,群里的小伙伴用java测试split发现结果不一致.案例可以简化为如下: ​    a. split( &amp;#39;a&amp;quot;:&amp;quot;&amp;#39; , &amp;#39;&amp;quot;:&amp;quot;&amp;#39; ) 的结果在java环境得到的数组只有一个元素: [ “a” ],而在python和hive环境下得到的数组都">
   
     <link rel="alternative" href="/atom.xml" title="MrDing的大数据之路" type="application/atom+xml">
   
@@ -284,8 +284,8 @@
         <ol>
 <li><p>问题发现</p>
 <p>今天看到一个hive环境下用split解析json取特定字段的值的案例,群里的小伙伴用java测试split发现结果不一致.案例可以简化为如下:</p>
-<p>​    a. split( “a&quot;:&quot;“ , “&quot;:&quot;“ ) 的结果在java环境得到的数组只有一个元素: [ “a” ],而在python和hive环境下得到的数组都是2个元素: [ “a” , “” ]</p>
-<p>​    b. split( “&quot;:&quot;a” , “&quot;:&quot;“ ) 的结果在python、java以及hive环境下均为[ “” , “a” ]</p>
+<p>​    a. <code>split( &#39;a&quot;:&quot;&#39; , &#39;&quot;:&quot;&#39; )</code> 的结果在java环境得到的数组只有一个元素: [ “a” ],而在python和hive环境下得到的数组都是2个元素: [ “a” , “” ]</p>
+<p>​    b. <code>split( &#39;&quot;:&quot;a&#39; , &#39;&quot;:&quot;&#39; )</code>  的结果在python、java以及hive环境下均为[ “” , “a” ]</p>
 </li>
 <li><p>原因查找</p>
 <p>split()中有一个 限制返回结果数的参数 limit,java对这个参数的处理有些许不同,具体如下:</p>
@@ -308,7 +308,7 @@
         <p><span>本文标题:</span><a  href="/2019/09/21/关于不同语言环境的split/">关于不同语言环境的split</a></p>
         <p><span>文章作者:</span><a  href="/" title="访问 Hunter Ding 的个人博客">Hunter Ding</a></p>
         <p><span>发布时间:</span>2019年09月21日 - 00时49分</p>
-        <p><span>最后更新:</span>2019年09月21日 - 01时19分</p>
+        <p><span>最后更新:</span>2019年09月21日 - 01时24分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2019/09/21/关于不同语言环境的split/" title="关于不同语言环境的split">http://DoomBoom.github.io/archives/2019/09/21/关于不同语言环境的split/</a>
             <span class="copy-path" data-clipboard-text="原文: http://DoomBoom.github.io/archives/2019/09/21/关于不同语言环境的split/　　作者: Hunter Ding" title=""></span>

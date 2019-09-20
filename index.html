@@ -273,8 +273,8 @@
         <ol>
 <li><p>问题发现</p>
 <p>今天看到一个hive环境下用split解析json取特定字段的值的案例,群里的小伙伴用java测试split发现结果不一致.案例可以简化为如下:</p>
-<p>​    a. split( “a&quot;:&quot;“ , “&quot;:&quot;“ ) 的结果在java环境得到的数组只有一个元素: [ “a” ],而在python和hive环境下得到的数组都是2个元素: [ “a” , “” ]</p>
-<p>​    b. split( “&quot;:&quot;a” , “&quot;:&quot;“ ) 的结果在python、java以及hive环境下均为[ “” , “a” ]</p>
+<p>​    a. <code>split( &#39;a&quot;:&quot;&#39; , &#39;&quot;:&quot;&#39; )</code> 的结果在java环境得到的数组只有一个元素: [ “a” ],而在python和hive环境下得到的数组都是2个元素: [ “a” , “” ]</p>
+<p>​    b. <code>split( &#39;&quot;:&quot;a&#39; , &#39;&quot;:&quot;&#39; )</code>  的结果在python、java以及hive环境下均为[ “” , “a” ]</p>
 </li>
 <li><p>原因查找</p>
 <p>split()中有一个 限制返回结果数的参数 limit,java对这个参数的处理有些许不同,具体如下:</p>
