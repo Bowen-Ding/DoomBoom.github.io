@@ -241,6 +241,211 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Hadoop集群搭建" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/09/14/Hadoop集群搭建/" class="article-date">
+      <time datetime="2019-09-14T03:53:48.471Z" itemprop="datePublished">2019-09-14</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2019/09/14/Hadoop集群搭建/">Hadoop集群搭建</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <blockquote>
+<p>安装一台vmware虚拟机</p>
+<ul>
+<li>系统版本: centos7.0</li>
+</ul>
+</blockquote>
+<ol>
+<li><p><strong>关闭防火墙和SELINUX</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#关闭防火墙</span><br><span class="line">systemctl stop firewalld.service</span><br><span class="line">#禁止开机启动</span><br><span class="line">systemctl disable firewalld.service</span><br><span class="line">#关闭selinux</span><br><span class="line">vi /etc/sysconfig/selinux</span><br><span class="line">#修改#SELINUX=enforcing 为</span><br><span class="line">SELINUX=disabled</span><br><span class="line">#保存退出</span><br><span class="line">setenforce 0</span><br></pre></td></tr></table></figure>
+
+<p>务必确保防火墙和selinux关闭,否则会导致许多问题</p>
+</li>
+<li><p><strong>设置静态ip</strong></p>
+<blockquote>
+<p>核心是需要保持这几个地方一致:</p>
+<ol>
+<li>宿主机适配器设置中VMnet8属性中IPv4属性设置:<ul>
+<li>不自动获取IP地址</li>
+<li>ip地址和网关在同一网段,这里我设置为192.168.13.101</li>
+<li>默认网关与首选DNS相同</li>
+</ul>
+</li>
+<li>虚拟机中网关与宿主机VMnet8默认网关相同,自定义IP处于同一网段,即都为1中示例的192.168.13.X,首选DNS与网关相同</li>
+</ol>
+</blockquote>
+<p>2.1 具体设置方法</p>
+<ul>
+<li><p>编辑配置ifcfg-ens33,根据网卡名称,文件名会有变化,可通过<code>ip addr</code>查看<br><code>vi /etc/sysconfig/network-scripts/ifcfg-ens33</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#文件内容</span></span><br><span class="line">TYPE=<span class="string">"Ethernet"</span></span><br><span class="line">BOOTPROTO=<span class="string">"static"</span></span><br><span class="line">IPADDR=<span class="string">"192.168.13.100"</span></span><br><span class="line">NETMASK=<span class="string">"255.255.255.0"</span></span><br><span class="line">GATEWAY=<span class="string">"192.168.13.4"</span><span class="comment">#与宿主机VMnet8的IPv4属性一致</span></span><br><span class="line">NAME=<span class="string">"ens33"</span></span><br><span class="line">DEVICE=<span class="string">"ens33"</span></span><br><span class="line">ONBOOT=<span class="string">"yes"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑配置network<br><code>vi /etc/sysconfig/network</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#文件内容</span></span><br><span class="line">NETWORKING=yes</span><br><span class="line">NETWORKING_IPV6=no</span><br><span class="line">HOSTNAME=hadoop01</span><br><span class="line">GATEWAY=192.168.13.4<span class="comment">#与宿主机VMnet8的IPv4属性一致</span></span><br><span class="line">DNS1=192.168.13.4<span class="comment">#与网关一致</span></span><br><span class="line">DNS2=8.8.8.8</span><br><span class="line">DNS3=8.8.4.4</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>新建用户组及赋予root权限</strong> </p>
+<p>3.1 新建用户组</p>
+<ul>
+<li>将hadoop用户加入用户组: <code>usermod -G hadoop hadoop</code></li>
+<li>重置用户密码:``passwd hadoop`</li>
+</ul>
+<p>3.2 赋予root权限</p>
+<ul>
+<li><p>编辑文件/etc/sudoers</p>
+<p>在<code>root ALL=(ALL) ALL</code>下添加一行:<code>hadoop ALL=(ALL) ALL</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root ALL=(ALL) ALL</span><br><span class="line">hadoop ALL=(ALL) ALL</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>hadoop用户若想用root权限执行命令,需要在命令前添加’sudo’,例如<code>sudo touch a.txt</code></p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><strong>克隆虚拟机并修改初始配置</strong> </p>
+<p>a. 通过vmware克隆为3台虚拟机</p>
+<p>b. 开启这三台虚拟机:</p>
+<ul>
+<li>修改/etc/sysconfig/network-scripts/ifcfg-ens3文件,同一网段内,更改ip地址,保证ip不冲突,重启网卡;<br><code>service network restart</code></li>
+<li>修改主机名<code>hostnamectl set -hostname XXX</code> </li>
+</ul>
+<blockquote>
+<p>这里我将三台机器名称设置为hadoop01、hadoop02、hadoop03,ip地址为192.168.13.101、192.168.13.102、192.168.13.103</p>
+</blockquote>
+</li>
+<li><p><strong>安装jdk和hadoop</strong> </p>
+<p>a. 下载linux版本的jdk1.8安装包和apache hadoop2.7.7安装包上传至虚拟机,可以用sftp或者rz,这里不做过多介绍</p>
+<p>b. 创建目录,解压安装包,jdk更推荐安装到/usr/bin下,这是很多程序的默认jdk路径</p>
+<ul>
+<li><code>mkdir /opt/module</code> </li>
+<li><code>tar -zxvf hadoop-2.7.7.tar.gz -C /opt/module/</code> </li>
+<li><code>tar -zxvf jdk1.8XXX.tar.gz -C /opt/module/</code> </li>
+</ul>
+<p>c. 配置环境变量</p>
+<ul>
+<li><code>vi /etc/profile</code>在文件末尾加上如下内容,需要根据实际文件名修改:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#set java environment</span></span><br><span class="line">JAVA_HOME=/opt/module/jdk1.8</span><br><span class="line">JRE_HOME=/opt/module/jdk1.8/jre</span><br><span class="line">CLASS_PATH=.:<span class="variable">$JAVA_HOME</span>/lib/dt.jar:<span class="variable">$JAVA_HOME</span>/lib/tools.jar:<span class="variable">$JRE_HOME</span>/lib</span><br><span class="line">PATH=<span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$JRE_HOME</span>/bin</span><br><span class="line"><span class="built_in">export</span> JAVA_HOME JRE_HOME CLASS_PATH PATH</span><br><span class="line"></span><br><span class="line"><span class="comment">#hadoop home</span></span><br><span class="line"><span class="built_in">export</span> HADOOP_HOME=/opt/module/hadoop-2.7.7</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$HADOOP_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/sbin</span><br></pre></td></tr></table></figure>
+
+<p>d. 各组件程序jdk地址替换</p>
+<blockquote>
+<p>将$HADOOP_HOME/etc/hadoop下的下列程序jdk地址替换</p>
+<ul>
+<li>hadoop-env.sh </li>
+<li>mapred-env.sh</li>
+<li>yarn-env.sh</li>
+</ul>
+</blockquote>
+</li>
+<li><p><strong>配置ssh免密登录</strong> </p>
+<p>a. 本机生成rsa私钥和公钥<code>ssh-keygen -t rsa</code> </p>
+<p>b. 将本机公钥复制到目标服务器目标用户<code>ssh-copy-id 192.168.13.103</code> </p>
+<p>c. 设置主机名和地址映射,这样可以直接用主机名代替ip进行访问和传输文件,好处是以后ip变化时更改ip不会对集群通信产生影响</p>
+<ul>
+<li><code>vi /etc/hosts</code>添加如下内容</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">192.168.13.102 hadoop02</span><br><span class="line">192.168.13.103 hadoop03</span><br><span class="line">192.168.13.104 hadoop04</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>hadoop文件配置</p>
+<p><em>仅作为示例,更多配置需要查看官方文档</em> </p>
+<blockquote>
+<p>自定义配置文件在$HADOOP_HOME/etc/hadoop下</p>
+</blockquote>
+<p>a. core-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 指定HDFS中NameNode的地址 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;hdfs://hadoop01:9000&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 指定Hadoop运行时产生文件的存储目录 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;/opt/module/hadoop-2.7/data/tmp&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>b. hdfs-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 文件副本数 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;3&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 指定Hadoop辅助名称节点主机配置 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hadoop03:50090&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>c. yarn-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Site specific YARN configuration properties --&gt;</span><br><span class="line">    &lt;!-- Reducer获取数据的方式 --&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">            &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span><br><span class="line">            &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- 指定YARN的ResourceManager的地址 --&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">            &lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;</span><br><span class="line">            &lt;value&gt;hadoop02&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>d. mapred-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 指定MR运行在Yarn上 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;yarn&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>同步hadoop和jdk至其他虚拟机</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">scp -r /opt/module hadoop@192.168.13.102:/opt/</span><br><span class="line">scp -r /opt/module hadoop@192.168.13.103:/opt/</span><br><span class="line"><span class="comment">#环境变量同步</span></span><br><span class="line">scp /etc/profile root@192.168.13.103:/etc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ntp时间同步</p>
+<blockquote>
+<ol>
+<li>所有机器安装ntp服务<code>yum -y install ntp</code>,并设置开机启动<code>systemctl ntpd enabled</code> </li>
+<li>修改配置文件/etc/ntp.conf,将主节点机器时间服务器设置为localhost,其他机器以这台机器为时间机器<br>a. 主节点hadoop01配置</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">restrict 192.168.13.0 mask 255.255.255.0 nomodify notrap</span><br><span class="line">#注释或删除下列</span><br><span class="line">#server 0.centos.pool.ntp.org iburst</span><br><span class="line">#server 1.centos.pool.ntp.org iburst</span><br><span class="line">#server 2.centos.pool.ntp.org iburst</span><br><span class="line">#server 3.centos.pool.ntp.org iburst</span><br><span class="line"></span><br><span class="line">server 127.127.1.0</span><br><span class="line">fudge 127.127.1.0 stratum 10</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>修改配置<code>vi /etc/sysconfg/ntpd</code>, 增加内容如下（让硬件时间与系统时间一起同步）</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SYNC_HWCLOCK=yes</span><br></pre></td></tr></table></figure>
+
+<p>b. 从节点配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#server 0.centos.pool.ntp.org iburst</span><br><span class="line">#server 1.centos.pool.ntp.org iburst</span><br><span class="line">#server 2.centos.pool.ntp.org iburst</span><br><span class="line">#server 3.centos.pool.ntp.org iburst</span><br><span class="line">server hadoop01</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动集群</p>
+<blockquote>
+<p>在配置namenode的机器上执行start-dfs.sh,配置yarn的机器上执行start-yarn.sh,jps确认是否正常启动</p>
+</blockquote>
+</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/bigdata/">bigdata</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hadoop/">Hadoop</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Hexo搭建个人博客及多终端同步使用" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
