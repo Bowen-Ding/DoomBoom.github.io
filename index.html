@@ -241,6 +241,96 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-三数之和-Three-Sum" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/10/02/三数之和-Three-Sum/" class="article-date">
+      <time datetime="2019-10-01T16:13:29.000Z" itemprop="datePublished">2019-10-02</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2019/10/02/三数之和-Three-Sum/">三数之和(Three Sum)</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <blockquote>
+<p>leetcode 第15题</p>
+</blockquote>
+<ol>
+<li>题目描述</li>
+</ol>
+   <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">给定一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？找出所有满足条件且不重复的三元组。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">注意：答案中不可以包含重复的三元组。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">例如, 给定数组 nums = [-1, 0, 1, 2, -1, -4]，</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">满足要求的三元组集合为：</span></span><br><span class="line"><span class="comment">[</span></span><br><span class="line"><span class="comment">  [-1, 0, 1],</span></span><br><span class="line"><span class="comment">  [-1, -1, 2]</span></span><br><span class="line"><span class="comment">]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">来源：力扣（LeetCode）</span></span><br><span class="line"><span class="comment">链接：https://leetcode-cn.com/problems/3sum</span></span><br><span class="line"><span class="comment">著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>解题思路</p>
+<p>思路: 排序后遍历第一个数,剩下两个数在第一个数的右边首尾用双指针,三数之和小于0 则第二个数右移,三数之和大于0 则第三个数左移,任意一个数移动前后值相同可以直接跳过</p>
+</li>
+<li><p>代码</p>
+<p>a. java code</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreeSum</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 思路: 排序后遍历第一个数,剩下两个数在第一个数的右边首尾用双指针,三数之和小于0 则第二个数右移,三数之和大于0 则第三个数左移,任意一个数移动前后值相同可以直接跳过</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; threeSum(<span class="keyword">int</span>[] nums) &#123;</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> len = nums.length;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">null</span> == res || len &lt; <span class="number">3</span>) <span class="keyword">return</span> res;</span><br><span class="line">        Arrays.sort(nums);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; len;i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (nums[i] &gt; <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">if</span> (i &gt; <span class="number">0</span> &amp;&amp; nums[i] == nums[i-<span class="number">1</span>]) <span class="keyword">continue</span>; <span class="comment">//第一个数移动前后相同,可以直接跳过</span></span><br><span class="line">            <span class="keyword">int</span> l = i + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">int</span> r = len - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">                <span class="keyword">int</span> sum = nums[i] + nums[l] + nums[r];</span><br><span class="line">                <span class="keyword">if</span> (sum == <span class="number">0</span>) &#123;</span><br><span class="line">                    res.add(Arrays.asList(nums[i],nums[l],nums[r]));</span><br><span class="line">                    <span class="keyword">while</span> (l &lt; r &amp;&amp; nums[l] == nums[l+<span class="number">1</span>]) l++; <span class="comment">//第二个数移动前后相同,可以直接跳过</span></span><br><span class="line">                    <span class="keyword">while</span> (l &lt; r &amp;&amp; nums[r] == nums[r-<span class="number">1</span>]) r--; <span class="comment">//第三个数移动前后相同,可以直接跳过</span></span><br><span class="line">                    l++;</span><br><span class="line">                    r--;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (sum &lt; <span class="number">0</span>) l++;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (sum &gt; <span class="number">0</span>) r--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>b. python code</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="comment"># 思路: 排序后遍历第一个数,剩下两个数在第一个数的右边首尾用双指针,三数之和小于0 则第二个数右移,三数之和大于0 则第三个数左移,任意一个数移动前后值相同可以直接跳过</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">threeSum</span><span class="params">(self, nums: [int])</span> -&gt; [[int]]:</span></span><br><span class="line">        nums.sort()</span><br><span class="line">        res,i,length = [],<span class="number">0</span>,len(nums)</span><br><span class="line">        <span class="keyword">if</span> length &lt; <span class="number">3</span>:</span><br><span class="line">            <span class="keyword">return</span> res</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(length):</span><br><span class="line">            <span class="keyword">if</span> nums[i] &gt; <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> i &gt; <span class="number">0</span> <span class="keyword">and</span> nums[i<span class="number">-1</span>] == nums[i]: <span class="comment"># 第1个数移动前后相同,可以直接跳过</span></span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            l = i + <span class="number">1</span></span><br><span class="line">            r = length - <span class="number">1</span></span><br><span class="line">            <span class="keyword">while</span> l &lt; r:</span><br><span class="line">                sum = nums[i] + nums[l] + nums[r]</span><br><span class="line">                <span class="keyword">if</span> sum == <span class="number">0</span>:</span><br><span class="line">                    res.append([nums[i],nums[l],nums[r]])</span><br><span class="line">                    <span class="keyword">while</span> l &lt; r <span class="keyword">and</span> nums[l] == nums[l+<span class="number">1</span>]: <span class="comment"># 第2个数移动前后相同,可以直接跳过</span></span><br><span class="line">                        l += <span class="number">1</span></span><br><span class="line">                    <span class="keyword">while</span> l &lt; r <span class="keyword">and</span> nums[r] == nums[r<span class="number">-1</span>]: <span class="comment"># 第3个数移动前后相同,可以直接跳过</span></span><br><span class="line">                        r -= <span class="number">1</span></span><br><span class="line">                    l += <span class="number">1</span></span><br><span class="line">                    r -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">elif</span> sum &lt; <span class="number">0</span>:</span><br><span class="line">                    l += <span class="number">1</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    r -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>复杂度分析</p>
+<p>时间复杂度: O(n²)</p>
+<p>​空间复杂度: O(1)</p>
+<p>​</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/algorithm/">algorithm</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-罗马数字转整数-Roman-to-Integer" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1022,93 +1112,6 @@
 <p>递归法:</p>
 <p>​    时间复杂度: O(n)</p>
 <p>​    空间复杂度: 树高,最坏为链表O(n),平均O(log n)</p>
-</li>
-</ol>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/algorithm/">algorithm</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-二叉树的中序遍历-Binary-Tree-Inorder-Traversal" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2019/09/18/二叉树的中序遍历-Binary-Tree-Inorder-Traversal/" class="article-date">
-      <time datetime="2019-09-17T16:09:44.000Z" itemprop="datePublished">2019-09-18</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2019/09/18/二叉树的中序遍历-Binary-Tree-Inorder-Traversal/">二叉树的中序遍历(Binary Tree Inorder Traversal)</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <blockquote>
-<p>leetcode 第94题</p>
-</blockquote>
-<ol>
-<li><p>题目描述</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">给定一个二叉树，返回它的中序 遍历。</span><br><span class="line"></span><br><span class="line">示例:</span><br><span class="line"></span><br><span class="line">输入: [1,null,2,3]</span><br><span class="line">   1</span><br><span class="line">    \</span><br><span class="line">     2</span><br><span class="line">    /</span><br><span class="line">   3</span><br><span class="line"></span><br><span class="line">输出: [1,3,2]</span><br><span class="line"></span><br><span class="line">进阶: 递归算法很简单，你可以通过迭代算法完成吗？</span><br><span class="line"></span><br><span class="line">来源：力扣（LeetCode）</span><br><span class="line">链接：https://leetcode-cn.com/problems/binary-tree-inorder-traversal</span><br><span class="line">著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>解题思路</p>
-<p>递归的方式,关键是理解递归过程中往结果添加节点的顺序</p>
-</li>
-<li><p>代码</p>
-<p>a. java code</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BinaryTreeInorderTraversal</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">inorderTraversal</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">    helper(root,res);</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">helper</span><span class="params">(TreeNode root, List res)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (root.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">        helper(root.left,res);</span><br><span class="line">      &#125;</span><br><span class="line">      res.add(root.val);</span><br><span class="line">      <span class="keyword">if</span> (root.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">        helper(root.right,res);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> val;</span><br><span class="line">    TreeNode left;</span><br><span class="line">    TreeNode right;</span><br><span class="line">    TreeNode(<span class="keyword">int</span> x) &#123;</span><br><span class="line">        val = x;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>b. python code</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inorderTraversal</span><span class="params">(self, root: TreeNode)</span> -&gt; List[int]:</span></span><br><span class="line">        res = []</span><br><span class="line">        stack = []</span><br><span class="line">        <span class="comment"># p作为指针</span></span><br><span class="line">        p = root</span><br><span class="line">        <span class="keyword">while</span> p <span class="keyword">or</span> stack:</span><br><span class="line">            <span class="keyword">while</span> p:</span><br><span class="line">                stack.append(p)</span><br><span class="line">                p = p.left <span class="comment"># 左子树优先入栈</span></span><br><span class="line">            <span class="comment"># 获取栈顶元素</span></span><br><span class="line">            tmp = stack.pop()</span><br><span class="line">            res.append(tmp.val)</span><br><span class="line">            <span class="comment"># 没有左子树时,右子树入栈</span></span><br><span class="line">            p = tmp.right</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        self.val = x</span><br><span class="line">        self.left = <span class="literal">None</span></span><br><span class="line">        self.right = <span class="literal">None</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>复杂度分析</p>
-<p>时间复杂度: O(n)</p>
-<p>​空间复杂度: 最坏为链表O(n),平均O(log n)</p>
 </li>
 </ol>
 
