@@ -241,6 +241,87 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-关于不同语言环境的split" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/09/21/关于不同语言环境的split/" class="article-date">
+      <time datetime="2019-09-20T16:49:35.000Z" itemprop="datePublished">2019-09-21</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2019/09/21/关于不同语言环境的split/">关于不同语言环境的split</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <ol>
+<li><p>问题发现</p>
+<p>今天看到一个hive环境下用split解析json取特定字段的值的案例,群里的小伙伴用java测试split发现结果不一致.案例可以简化为如下:</p>
+<p>​    a. <code>split( &#39;a&quot;:&quot;&#39; , &#39;&quot;:&quot;&#39; )</code> 的结果在java环境得到的数组只有一个元素: [ “a” ],而在python和hive环境下得到的数组都是2个元素: [ “a” , “” ]</p>
+<p>​    b. <code>split( &#39;&quot;:&quot;a&#39; , &#39;&quot;:&quot;&#39; )</code>  的结果在python、java以及hive环境下均为[ “” , “a” ]</p>
+</li>
+<li><p>原因查找</p>
+<p>split()中有一个 限制返回结果数的参数 limit,java对这个参数的处理有些许不同,具体如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//当不指定参数limit时,调用如下方法,该方法返回limit默认为0的split()方法</span></span><br><span class="line"><span class="keyword">public</span> String[] split(String regex) &#123;</span><br><span class="line">        <span class="keyword">return</span> split(regex, limit: <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"><span class="comment">//接下来进入split(regexp,limit)方法查看对limit为0的返回值的处理</span></span><br><span class="line"><span class="comment">// Construct result</span></span><br><span class="line"><span class="keyword">int</span> resultSize = list.size();</span><br><span class="line"><span class="keyword">if</span> (limit == <span class="number">0</span>) &#123;</span><br><span class="line">	<span class="keyword">while</span> (resultSize &gt; <span class="number">0</span> &amp;&amp; list.get(resultSize - <span class="number">1</span>).length() == <span class="number">0</span>) &#123;</span><br><span class="line">	resultSize--;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到当limit为0时,结果数组中末尾为空的元素全部都会被移除,所以这里要将该字符串切割为两个元素的数组要这样做:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="string">"a\":\""</span>;</span><br><span class="line">String[] l1 = s1.split(<span class="string">"\":\""</span>,<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+
+<p>​</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/java/">java</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-寻找两个有序数组的中位数-Median-of-Two-Sorted-Arrays" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1198,71 +1279,9 @@
 
 
   
-    <article id="post-我的Blog" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2019/09/12/我的Blog/" class="article-date">
-      <time datetime="2019-09-12T11:50:36.000Z" itemprop="datePublished">2019-09-12</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2019/09/12/我的Blog/">我的Blog</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h3 id="写在搭建博客之初"><a href="#写在搭建博客之初" class="headerlink" title="写在搭建博客之初"></a>写在搭建博客之初</h3><p>​    之前一直在用云笔记做记录,近期准备把这些笔记搬运到博客上来。博客内容围绕大数据为主,其他领域也会有所涉及。博客内容尽量来自书籍或者官方文档/源码,借鉴他人博客时应检验内容的可靠性,尤其是涉及到代码部分,必须要自己实现一遍验证正确性,并写明原文地址。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/essay/">essay</a>
-    </div>
-
-
-      
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 
