@@ -241,6 +241,186 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-岛屿数量-Number-of-Islands" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/10/19/岛屿数量-Number-of-Islands/" class="article-date">
+      <time datetime="2019-10-19T03:10:20.000Z" itemprop="datePublished">2019-10-19</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2019/10/19/岛屿数量-Number-of-Islands/">岛屿数量(Number of Islands)</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <blockquote>
+<p>leetcode 第200题</p>
+</blockquote>
+<ol>
+<li>题目描述</li>
+</ol>
+   <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">给定一个由 '1'（陆地）和 '0'（水）组成的的二维网格，计算岛屿的数量。一个岛被水包围，并且它是通过水平方向或垂直方向上相邻的陆地连接而成的。你可以假设网格的四个边均被水包围。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">示例 1:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输入:</span></span><br><span class="line"><span class="comment">11110</span></span><br><span class="line"><span class="comment">11010</span></span><br><span class="line"><span class="comment">11000</span></span><br><span class="line"><span class="comment">00000</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输出: 1</span></span><br><span class="line"><span class="comment">示例 2:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输入:</span></span><br><span class="line"><span class="comment">11000</span></span><br><span class="line"><span class="comment">11000</span></span><br><span class="line"><span class="comment">00100</span></span><br><span class="line"><span class="comment">00011</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输出: 3</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">来源：力扣（LeetCode）</span></span><br><span class="line"><span class="comment">链接：https://leetcode-cn.com/problems/number-of-islands</span></span><br><span class="line"><span class="comment">著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>解题思路</p>
+<p>深度优先遍历: 利用递归来依次完成单个方向的查找,然后回溯继续查找</p>
+<p>广度优先遍历: 利用队列,将陆地不断加入队列,扩展周围连着的陆地加入队列,同时移除用于扩展的陆地</p>
+<p>并查集: 需要理解并查集类的特性,初始数量为单个元素的总和,把需要联合的元素(对应本题为所有水域联合,相连的陆地联合)依次相连最终指向同一个根节点,每联合一个元素,元素数量和减1,最终没有需要联合的元素时,就为岛屿数量加上1个水域</p>
+</li>
+<li><p>代码</p>
+<p>a. java code</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NumberOfIslands</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 深度优先遍历思路</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[][] direct = &#123;&#123;-<span class="number">1</span>,<span class="number">0</span>&#125;,&#123;<span class="number">1</span>,<span class="number">0</span>&#125;,&#123;<span class="number">0</span>,<span class="number">1</span>&#125;,&#123;<span class="number">0</span>,-<span class="number">1</span>&#125;&#125;; <span class="comment">// 控制移动的4个方向</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span>[][] mark; <span class="comment">// 已经遍历过的点做标记,不再重新遍历</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">char</span>[][] grid;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> rows; <span class="comment">// 行数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> cols; <span class="comment">// 列数</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numIslands</span><span class="params">(<span class="keyword">char</span>[][] grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.grid = grid;</span><br><span class="line">        rows = grid.length;</span><br><span class="line">        <span class="keyword">if</span> (rows == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        cols = grid[<span class="number">0</span>].length;</span><br><span class="line">        mark = <span class="keyword">new</span> <span class="keyword">boolean</span>[rows][cols];</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; rows; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; cols; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (!mark[i][j] &amp;&amp; grid[i][j] == <span class="string">'1'</span>) &#123;</span><br><span class="line">                    count++;</span><br><span class="line">                    dfs(i,j);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> i,<span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        mark[i][j] = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">for</span> ( <span class="keyword">int</span> k = <span class="number">0</span>; k &lt; <span class="number">4</span>; k++) &#123;</span><br><span class="line">            <span class="keyword">int</span> x = i + direct[k][<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">int</span> y = j + direct[k][<span class="number">1</span>];</span><br><span class="line">            <span class="keyword">if</span> (x &gt;= <span class="number">0</span> &amp;&amp; x &lt; rows &amp;&amp; y &gt;= <span class="number">0</span> &amp;&amp; y &lt; cols &amp;&amp; !mark[x][y] &amp;&amp; grid[x][y] == <span class="string">'1'</span>) &#123;</span><br><span class="line">                dfs(x,y);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>b. python code</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> deque</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> List</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="comment"># 广度优先遍历解法,用队列保存四个方向的位置,不断标记陆地</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">numIslands</span><span class="params">(self, grid: List[List[str]])</span> -&gt; int:</span></span><br><span class="line">        direct = [[<span class="number">-1</span>, <span class="number">0</span>], [<span class="number">1</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">-1</span>], [<span class="number">0</span>, <span class="number">1</span>]]</span><br><span class="line">        rows = len(grid)</span><br><span class="line">        <span class="keyword">if</span> rows == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        cols = len(grid[<span class="number">0</span>])</span><br><span class="line">        mark = [[<span class="literal">False</span> <span class="keyword">for</span> _ <span class="keyword">in</span> range(cols)] <span class="keyword">for</span> _ <span class="keyword">in</span> range(rows)]</span><br><span class="line"></span><br><span class="line">        count = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(rows):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(cols):</span><br><span class="line">                <span class="keyword">if</span> mark[i][j] == <span class="literal">False</span> <span class="keyword">and</span> grid[i][j] == <span class="string">'1'</span>:</span><br><span class="line">                    count += <span class="number">1</span></span><br><span class="line">                    mark[i][j] = <span class="literal">True</span></span><br><span class="line">                    q = deque()</span><br><span class="line">                    q.append((i,j))</span><br><span class="line">                    <span class="keyword">while</span> q:</span><br><span class="line">                        cur_x,cur_y = q.popleft()</span><br><span class="line">                        <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">4</span>):</span><br><span class="line">                            new_x = cur_x + direct[k][<span class="number">0</span>]</span><br><span class="line">                            new_y = cur_y + direct[k][<span class="number">1</span>]</span><br><span class="line">                            <span class="keyword">if</span> <span class="number">0</span> &lt;= new_x &lt; rows <span class="keyword">and</span> <span class="number">0</span> &lt;= new_y &lt; cols <span class="keyword">and</span> mark[new_x][new_y] == <span class="literal">False</span> <span class="keyword">and</span> grid[new_x][new_y] == <span class="string">'1'</span>:</span><br><span class="line">                                mark[new_x][new_y] = <span class="literal">True</span></span><br><span class="line">                                q.append((new_x,new_y))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> count</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 并查集解法</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">numIslands2</span><span class="params">(self, grid: List[List[str]])</span> -&gt; int:</span></span><br><span class="line">        <span class="comment"># 并查集类的定义,关键点: union时,同一个根节点的不用处理,不同根节点的会根据rank合并,同时并查集元素减1</span></span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span>:</span></span><br><span class="line">            <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n)</span>:</span></span><br><span class="line">                self.count = n</span><br><span class="line">                self.parent = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(n)]</span><br><span class="line">                self.rank = [<span class="number">1</span> <span class="keyword">for</span> _ <span class="keyword">in</span> range(n)]</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">def</span> <span class="title">get_count</span><span class="params">(self)</span>:</span></span><br><span class="line">                <span class="keyword">return</span> self.count</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">def</span> <span class="title">find</span><span class="params">(self,p)</span>:</span></span><br><span class="line">                <span class="keyword">while</span> p != self.parent[p]:</span><br><span class="line">                    self.parent[p] = self.parent[self.parent[p]]</span><br><span class="line">                    p = self.parent[p]</span><br><span class="line">                <span class="keyword">return</span> p</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">def</span> <span class="title">is_connected</span><span class="params">(self,p,q)</span>:</span></span><br><span class="line">                <span class="keyword">return</span> self.find(p) == self.find(q)</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">def</span> <span class="title">union</span><span class="params">(self,p,q)</span>:</span></span><br><span class="line">                p_root = self.find(p)</span><br><span class="line">                q_root = self.find(q)</span><br><span class="line">                <span class="keyword">if</span> p_root == q_root:</span><br><span class="line">                    <span class="keyword">return</span></span><br><span class="line">                <span class="keyword">elif</span> self.rank[p_root] &gt; self.rank[q_root]:</span><br><span class="line">                    self.parent[q_root] = p_root</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    self.parent[q_root] = p_root</span><br><span class="line">                    self.rank[p_root] += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">                self.count -= <span class="number">1</span></span><br><span class="line">        rows = len(grid)</span><br><span class="line">        <span class="keyword">if</span> rows == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        cols = len(grid[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">get_index</span><span class="params">(x,y)</span>:</span></span><br><span class="line">            <span class="keyword">return</span> x * cols + y</span><br><span class="line"></span><br><span class="line">        direct = [(<span class="number">1</span>,<span class="number">0</span>),(<span class="number">0</span>,<span class="number">1</span>)]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 增加一个虚拟节点,为水的最后都指向这个虚拟节点</span></span><br><span class="line">        dummy_node = rows * cols</span><br><span class="line">        <span class="comment"># 初始 count 数是所有元素个数加上1个虚拟节点</span></span><br><span class="line">        uf = UnionFind(dummy_node + <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(rows):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(cols):</span><br><span class="line">                <span class="comment"># 水区域都跟虚拟节点合并</span></span><br><span class="line">                <span class="keyword">if</span> grid[i][j] == <span class="string">'0'</span>:</span><br><span class="line">                    uf.union(get_index(i,j),dummy_node)</span><br><span class="line">                <span class="keyword">elif</span> grid[i][j] == <span class="string">'1'</span>:</span><br><span class="line">                    <span class="comment"># 如果向右和向下为陆地,则合并,每合并一个点,count需要减1</span></span><br><span class="line">                    <span class="keyword">for</span> d <span class="keyword">in</span> direct:</span><br><span class="line">                        x = i + d[<span class="number">0</span>]</span><br><span class="line">                        y = j + d[<span class="number">1</span>]</span><br><span class="line">                        <span class="keyword">if</span> x &lt; rows <span class="keyword">and</span> y &lt; cols <span class="keyword">and</span> grid[x][y] == <span class="string">'1'</span>:</span><br><span class="line">                            uf.union(get_index(i,j),get_index(x,y))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> uf.get_count() - <span class="number">1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>复杂度分析</p>
+<p>时间复杂度: 均为O(m*n)</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/algorithm/">algorithm</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-合并两个有序列表-Merge-Two-Sorted-Lists" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/10/18/合并两个有序列表-Merge-Two-Sorted-Lists/" class="article-date">
+      <time datetime="2019-10-18T15:01:35.000Z" itemprop="datePublished">2019-10-18</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2019/10/18/合并两个有序列表-Merge-Two-Sorted-Lists/">合并两个有序列表(Merge Two Sorted Lists)</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <blockquote>
+<p>leetcode 第20题</p>
+</blockquote>
+<ol>
+<li>题目描述</li>
+</ol>
+   <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">将两个有序链表合并为一个新的有序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 </span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">示例：</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输入：1-&gt;2-&gt;4, 1-&gt;3-&gt;4</span></span><br><span class="line"><span class="comment">输出：1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">来源：力扣（LeetCode）</span></span><br><span class="line"><span class="comment">链接：https://leetcode-cn.com/problems/merge-two-sorted-lists</span></span><br><span class="line"><span class="comment">著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>解题思路</p>
+<p>递归思路: 简单的深度优先遍历</p>
+<p>迭代思路: 初始化结果LIstNode时,创建一个副本,副本作为指针不断指向下一个需要添加到结果中的ListNode</p>
+</li>
+<li><p>代码</p>
+<p>a. java code</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * public class ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) &#123; val = x; &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MergeTwoSortedLists</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 递归,深度优先遍历</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ListNode <span class="title">mergeTwoLists</span><span class="params">(ListNode l1, ListNode l2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (l1 == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> l2;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (l2 == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> l1;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (l1.val &lt; l2.val) &#123;</span><br><span class="line">            l1.next = mergeTwoLists(l1.next,l2);</span><br><span class="line">            <span class="keyword">return</span> l1;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            l2.next = mergeTwoLists(l1,l2.next);</span><br><span class="line">            <span class="keyword">return</span> l2;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>b. python code</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for singly-linked list.</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ListNode</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        self.val = x</span><br><span class="line">        self.next = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="comment"># 迭代</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">mergeTwoLists</span><span class="params">(self, l1: ListNode, l2: ListNode)</span> -&gt; ListNode:</span></span><br><span class="line">        pre_res:ListNode = ListNode(<span class="number">-1</span>);</span><br><span class="line">        cp = pre_res</span><br><span class="line">        <span class="keyword">while</span> (l1 <span class="keyword">and</span> l2):</span><br><span class="line">            <span class="keyword">if</span> (l1.val &lt; l2.val):</span><br><span class="line">                cp.next = l2</span><br><span class="line">                l1 = l1.next</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                cp.next = l1</span><br><span class="line">                l2 = l2.next</span><br><span class="line">            cp = cp.next</span><br><span class="line"></span><br><span class="line">        cp.next = l1 <span class="keyword">if</span> l1 <span class="keyword">else</span> l2</span><br><span class="line">        <span class="keyword">return</span> pre_res.next</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>复杂度分析</p>
+<p>时间复杂度: O(m+n)</p>
+<p>空间复杂度: O(m+n)</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/algorithm/">algorithm</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-有效的括号-Valid-Parentheses" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -937,186 +1117,6 @@
 <p>4.2 动态规划</p>
 <p>​    时间复杂度: O(T * P)</p>
 <p>​    空间复杂度: O(T * P)</p>
-</li>
-</ol>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/algorithm/">algorithm</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-字符串转换整数-String-to-Integer" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2019/09/26/字符串转换整数-String-to-Integer/" class="article-date">
-      <time datetime="2019-09-25T17:06:22.000Z" itemprop="datePublished">2019-09-26</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2019/09/26/字符串转换整数-String-to-Integer/">字符串转换整数(String to Integer)</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <blockquote>
-<p>leetcode 第8题</p>
-</blockquote>
-<ol>
-<li><p>题目描述</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">请你来实现一个 atoi 函数，使其能将字符串转换成整数。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">首先，该函数会根据需要丢弃无用的开头空格字符，直到寻找到第一个非空格的字符为止。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">当我们寻找到的第一个非空字符为正或者负号时，则将该符号与之后面尽可能多的连续数字组合起来，作为该整数的正负号；假如第一个非空字符是数字，则直接将其与之后连续的数字字符组合起来，形成整数。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">该字符串除了有效的整数部分之后也可能会存在多余的字符，这些字符可以被忽略，它们对于函数不应该造成影响。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">注意：假如该字符串中的第一个非空格字符不是一个有效整数字符、字符串为空或字符串仅包含空白字符时，则你的函数不需要进行转换。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">在任何情况下，若函数不能进行有效的转换时，请返回 0。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">说明：</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">假设我们的环境只能存储 32 位大小的有符号整数，那么其数值范围为 [−2^31,  2^31 − 1]。如果数值超过这个范围，请返回  INT_MAX (2^31 − 1) 或 INT_MIN (−2^31) 。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">示例 1:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输入: "42"</span></span><br><span class="line"><span class="comment">输出: 42</span></span><br><span class="line"><span class="comment">示例 2:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输入: "   -42"</span></span><br><span class="line"><span class="comment">输出: -42</span></span><br><span class="line"><span class="comment">解释: 第一个非空白字符为 '-', 它是一个负号。</span></span><br><span class="line"><span class="comment">     我们尽可能将负号与后面所有连续出现的数字组合起来，最后得到 -42 。</span></span><br><span class="line"><span class="comment">示例 3:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输入: "4193 with words"</span></span><br><span class="line"><span class="comment">输出: 4193</span></span><br><span class="line"><span class="comment">解释: 转换截止于数字 '3' ，因为它的下一个字符不为数字。</span></span><br><span class="line"><span class="comment">示例 4:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输入: "words and 987"</span></span><br><span class="line"><span class="comment">输出: 0</span></span><br><span class="line"><span class="comment">解释: 第一个非空字符是 'w', 但它不是数字或正、负号。</span></span><br><span class="line"><span class="comment">     因此无法执行有效的转换。</span></span><br><span class="line"><span class="comment">示例 5:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输入: "-91283472332"</span></span><br><span class="line"><span class="comment">输出: -2147483648</span></span><br><span class="line"><span class="comment">解释: 数字 "-91283472332" 超过 32 位有符号整数范围。</span></span><br><span class="line"><span class="comment">     因此返回 INT_MIN (−2^31) 。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">来源：力扣（LeetCode）</span></span><br><span class="line"><span class="comment">链接：https://leetcode-cn.com/problems/string-to-integer-atoi</span></span><br><span class="line"><span class="comment">著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>解题思路</p>
-<p>a. 解法1: 正则表达式</p>
-<p>b. 解法2: 将字符串去除首尾空白字符后,判断字符串合法的情况下,找到第一个非数字的位置,截取字符串到这个位置再转换为整数</p>
-<p>​</p>
-</li>
-<li><p>代码</p>
-<p>a. java code</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.regex.Matcher;</span><br><span class="line"><span class="keyword">import</span> java.util.regex.Pattern;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringToInteger</span> </span>&#123;</span><br><span class="line">    <span class="comment">//解法1: 正则表达式</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">myAtoi</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">        str = str.trim();</span><br><span class="line">        Pattern r = Pattern.compile(<span class="string">"^([(\\+\\-]?\\d+)"</span>);</span><br><span class="line">        Matcher m = r.matcher(str);</span><br><span class="line">        String res = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">if</span> (m.find()) &#123;</span><br><span class="line">            res = m.group(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (res.length() == <span class="number">1</span> &amp;&amp; (res.charAt(<span class="number">0</span>) == <span class="string">'+'</span> || res.charAt(<span class="number">0</span>) == <span class="string">'-'</span> )) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> Integer.parseInt(res);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="keyword">return</span> res.charAt(<span class="number">0</span>) == <span class="string">'-'</span> ? Integer.MIN_VALUE : Integer.MAX_VALUE;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//解法2: 判断字符串合法的情况下,找到第一个非数字的位置,截取到这个位置再转换为整数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">myAtoi2</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">        str = str.trim();</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == str || str.isEmpty()) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">char</span> head = str.charAt(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">if</span> (str.length() == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (isDigit(head)) &#123;</span><br><span class="line">                <span class="keyword">return</span> Integer.parseInt(str);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String res = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">if</span> ( isDigit(head) || head == <span class="string">'+'</span> || head == <span class="string">'-'</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!isDigit(str.charAt(<span class="number">1</span>)) &amp;&amp; !isDigit(str.charAt(<span class="number">0</span>))) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">while</span> ( i &lt; str.length()) &#123;</span><br><span class="line">                <span class="keyword">if</span> (isDigit(str.charAt(i))) &#123;</span><br><span class="line">                    i++;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            res = str.substring(<span class="number">0</span>,i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> Integer.parseInt(res);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="keyword">return</span> res.charAt(<span class="number">0</span>) == <span class="string">'-'</span> ? Integer.MIN_VALUE : Integer.MAX_VALUE;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isDigit</span><span class="params">(<span class="keyword">char</span> c)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> c &gt;= <span class="string">'0'</span> &amp;&amp; c&lt;= <span class="string">'9'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>b. python code</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="comment">#解法1: 正则表达式</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">myAtoi</span><span class="params">(self, str: str)</span> -&gt; int:</span></span><br><span class="line">        <span class="keyword">return</span> max(min(int(*re.findall(<span class="string">'^[\+\-]?\d+'</span>,str.lstrip())),<span class="number">2</span> ** <span class="number">31</span> - <span class="number">1</span>),<span class="number">-2</span> ** <span class="number">31</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#解法2: 判断字符串合法的情况下,找到第一个非数字的位置,截取字符串到这个位置再转换为整数</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">myAtoi2</span><span class="params">(self, str: str)</span> -&gt; int:</span></span><br><span class="line">        s = str.lstrip()</span><br><span class="line">        <span class="keyword">if</span> s.isdigit():</span><br><span class="line">            <span class="keyword">return</span> max(min(int(s),<span class="number">2</span> ** <span class="number">31</span> - <span class="number">1</span>),<span class="number">-2</span> ** <span class="number">31</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> re.match(<span class="string">'^[\+\-\d]'</span>,s) <span class="keyword">or</span> s == <span class="string">'+'</span> <span class="keyword">or</span> s == <span class="string">'-'</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">not</span> s[<span class="number">1</span>].isdigit()) <span class="keyword">and</span> (<span class="keyword">not</span> s[<span class="number">0</span>].isdigit()):</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        i = <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> i &lt; len(s):</span><br><span class="line">            <span class="keyword">if</span> s[i].isdigit():</span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        num = max(min(int(s[<span class="number">0</span>:i]),<span class="number">2</span> ** <span class="number">31</span> - <span class="number">1</span>),<span class="number">-2</span> ** <span class="number">31</span>)</span><br><span class="line">        <span class="keyword">return</span> num</span><br></pre></td></tr></table></figure>
-
-<p>​</p>
-</li>
-</ol>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/algorithm/">algorithm</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-无重复字符的最长子串-Length-Of-Longest-Substring" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2019/09/23/无重复字符的最长子串-Length-Of-Longest-Substring/" class="article-date">
-      <time datetime="2019-09-23T15:41:21.000Z" itemprop="datePublished">2019-09-23</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2019/09/23/无重复字符的最长子串-Length-Of-Longest-Substring/">无重复字符的最长子串(Longest Substring Without Repeating Characters)</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <blockquote>
-<p>leetcode 第3题</p>
-</blockquote>
-<ol>
-<li><p>题目描述</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">示例 1:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输入: "abcabcbb"</span></span><br><span class="line"><span class="comment">输出: 3</span></span><br><span class="line"><span class="comment">解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。</span></span><br><span class="line"><span class="comment">示例 2:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输入: "bbbbb"</span></span><br><span class="line"><span class="comment">输出: 1</span></span><br><span class="line"><span class="comment">解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。</span></span><br><span class="line"><span class="comment">示例 3:</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">输入: "pwwkew"</span></span><br><span class="line"><span class="comment">输出: 3</span></span><br><span class="line"><span class="comment">解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。</span></span><br><span class="line"><span class="comment">     请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">来源：力扣（LeetCode）</span></span><br><span class="line"><span class="comment">链接：https://leetcode-cn.com/problems/longest-substring-without-repeating-characters</span></span><br><span class="line"><span class="comment">著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>解题思路</p>
-<p>a. 解法1: 通过滑动窗口完成,确定起点i,右边界j,加入set中,不断右移j,知道j已经在set中,得到无重复子串长度;遍历起点i,找到最长的无重复字符子串</p>
-<p>b. 解法2: 优化方法,当j已经在set中出现过,那么i可以直接移到j第一次出现的索引之后一位,而不是移动一格,用map存储(j,j的index)</p>
-<p>​</p>
-</li>
-<li><p>代码</p>
-<p>a. java code</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LongestSubstringWithoutRepeatingCharacters</span> </span>&#123;</span><br><span class="line">    <span class="comment">//解法1: 通过划动窗口完成,确定起点i,右边界j,加入set中,不断右移j,知道j已经在set中,得到无重复子串长度;遍历起点i,找到最长的无重复字符子串</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> l = s.length();</span><br><span class="line">        Set&lt;Character&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> max = <span class="number">0</span>,i=<span class="number">0</span>,j=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; l &amp;&amp; j &lt; l) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!set.contains(s.charAt(j))) &#123;</span><br><span class="line">                set.add(s.charAt(j++));</span><br><span class="line">                max = Math.max(max,j-i);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                set.remove(s.charAt(i++));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//解法2: 优化方法,当j已经在set中出现过,那么i可以直接移到j第一次出现的索引之后一位,而不是移动一格,用map存储(j,j的index)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring2</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> l = s.length(),max = <span class="number">0</span>;</span><br><span class="line">        Map&lt;Character,Integer&gt; m = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>,j = <span class="number">0</span>;j &lt; l;j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (m.containsKey(s.charAt(j))) &#123;</span><br><span class="line">                i = Math.max(m.get(s.charAt(j)),i);</span><br><span class="line">            &#125;</span><br><span class="line">            max = Math.max(max,j - i + <span class="number">1</span>);</span><br><span class="line">            <span class="comment">//也可以在前面i赋值时j的index加1,最后效果都是i移到j后一位</span></span><br><span class="line">            m.put(s.charAt(j),j + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    解法2优化: ascii码值数组代替map结构,常用数组如下:</span></span><br><span class="line"><span class="comment">        int [26] 用于字母 ‘a’ - ‘z’ 或 ‘A’ - ‘Z’</span></span><br><span class="line"><span class="comment">        int [128] 用于ASCII码</span></span><br><span class="line"><span class="comment">        int [256] 用于扩展ASCII码</span></span><br><span class="line"><span class="comment">    数据结构优化,速度优化明显</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring3</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> l = s.length(),max = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span>[] index = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">128</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>,j = <span class="number">0</span>;j &lt; l; j++) &#123;</span><br><span class="line">            i = Math.max(index[s.charAt(j)],i);</span><br><span class="line">            max = Math.max(max,j - i + <span class="number">1</span>);</span><br><span class="line">            index[s.charAt(j)] = j + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>b. python code</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="comment">#解法1: 通过划动窗口完成,确定起点i,右边界j,加入set中,不断右移j,知道j已经在set中,得到无重复子串长度;遍历起点i,找到最长的无重复字符子串</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(self, s: str)</span> -&gt; int:</span></span><br><span class="line">        l, m, win = len(s), <span class="number">0</span>, set()</span><br><span class="line">        i, j = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> i &lt; l <span class="keyword">and</span> j &lt; l:</span><br><span class="line">            <span class="keyword">if</span> (s[j] <span class="keyword">not</span> <span class="keyword">in</span> win):</span><br><span class="line">                win.add(s[j])</span><br><span class="line">                m = max(m, j - i + <span class="number">1</span>)</span><br><span class="line">                j += <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                win.remove(s[i])</span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> m</span><br><span class="line"></span><br><span class="line">    <span class="comment">#解法2: 优化方法,当j已经在set中出现过,那么i可以直接移到j第一次出现的索引之后一位,而不是移动一格,用map存储(j,j的index)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lengthOfLongestSubstring2</span><span class="params">(self, s: str)</span> -&gt; int:</span></span><br><span class="line">        l, m, dic = len(s), <span class="number">0</span>, &#123;&#125;</span><br><span class="line">        i, j = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(l):</span><br><span class="line">            <span class="keyword">if</span> (s[j] <span class="keyword">in</span> dic.keys()):</span><br><span class="line">                i = max(i, dic[s[j]])</span><br><span class="line">            dic[s[j]] = j + <span class="number">1</span></span><br><span class="line">            m = max(m, j - i + <span class="number">1</span>)</span><br><span class="line">            j += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> m</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>复杂度分析</p>
-<p>解法1:</p>
-<p>​    时间复杂度: O(n) ≈ O(2n)</p>
-<p>​    空间复杂度: O(min(m,n))</p>
-<p>解法2:</p>
-<p>​    时间复杂度: O(n)</p>
-<p>​    空间复杂度: O(min(m,n))</p>
 </li>
 </ol>
 

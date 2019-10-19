@@ -241,6 +241,301 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-两数相加-Add-Two-Numbers" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/09/17/两数相加-Add-Two-Numbers/" class="article-date">
+      <time datetime="2019-09-16T17:21:52.000Z" itemprop="datePublished">2019-09-17</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2019/09/17/两数相加-Add-Two-Numbers/">两数相加(Add Two Numbers)</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <blockquote>
+<p>leetcode 第2题</p>
+</blockquote>
+<ol>
+<li><p>题目描述</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的每个节点只能存储 一位 数字。</span><br><span class="line"></span><br><span class="line">如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。</span><br><span class="line"></span><br><span class="line">您可以假设除了数字 0 之外，这两个数都不会以 0 开头。</span><br><span class="line"></span><br><span class="line">示例：</span><br><span class="line"></span><br><span class="line">输入：(2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)</span><br><span class="line">输出：7 -&gt; 0 -&gt; 8</span><br><span class="line">原因：342 + 465 = 807</span><br><span class="line"></span><br><span class="line">来源：力扣（LeetCode）</span><br><span class="line">链接：https://leetcode-cn.com/problems/add-two-numbers</span><br><span class="line">著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Definition for singly-linked list.</span><br><span class="line"> * public class ListNode &#123;</span><br><span class="line"> *     int val;</span><br><span class="line"> *     ListNode next;</span><br><span class="line"> *     ListNode(int x) &#123; val = x; &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解题思路</p>
+<p>通过一个变量carry保存每次运算的进位值,同时作为下次运算的初始值.</p>
+<p>a.因为需要不断的迭代计算,为了不破坏原始数据和结果集,需要对两个ListNode以及结果ListNode创建额外的ListNode对象引用;</p>
+<p>b.将两个ListNode对象的当前值以及carry值相加得到当前计算的总和,总和进位的值赋给carry,个位数为结果的当前值;</p>
+<p>c.将用于计算的引用对象的next值赋值给自己,用于结果的引用对象的next初始值设为carry赋给自己,重复b,直到两个计算对象的next值和carry均为空。</p>
+</li>
+<li><p>代码</p>
+<p>a. java code</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ListNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> val;</span><br><span class="line">    ListNode next;</span><br><span class="line">    ListNode(<span class="keyword">int</span> x) &#123; val = x; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AddTwoNumbers</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ListNode <span class="title">addTwoNumbers</span><span class="params">(ListNode l1, ListNode l2)</span> </span>&#123;</span><br><span class="line">        ListNode res = <span class="keyword">new</span> ListNode(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">int</span> carry = <span class="number">0</span>;</span><br><span class="line">        ListNode cur_l1 = l1,cur_l2 = l2,curr = res;</span><br><span class="line">        <span class="keyword">while</span> (carry != <span class="number">0</span> || cur_l1 != <span class="keyword">null</span> || cur_l2 != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">int</span> x = cur_l1 != <span class="keyword">null</span> ? cur_l1.val : <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> y = cur_l2 != <span class="keyword">null</span> ? cur_l2.val : <span class="number">0</span>;</span><br><span class="line">            curr.next = <span class="keyword">new</span> ListNode(carry);</span><br><span class="line">            curr = curr.next;</span><br><span class="line">            <span class="keyword">int</span> sum = x + y + carry;</span><br><span class="line">            curr.val = sum % <span class="number">10</span>;</span><br><span class="line">            carry = sum / <span class="number">10</span>;</span><br><span class="line">            <span class="keyword">if</span> (cur_l1 != <span class="keyword">null</span>) cur_l1 = cur_l1.next;</span><br><span class="line">            <span class="keyword">if</span> (cur_l2 != <span class="keyword">null</span>) cur_l2 = cur_l2.next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>  res.next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>b. python code</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ListNode</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        self.val = x</span><br><span class="line">        self.next = <span class="literal">None</span></span><br><span class="line">        </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">addTwoNumbers</span><span class="params">(self, l1: ListNode, l2: ListNode)</span> -&gt; ListNode:</span></span><br><span class="line">        res = ListNode(<span class="number">0</span>)</span><br><span class="line">        carry = <span class="number">0</span></span><br><span class="line">        curr = res</span><br><span class="line">        <span class="keyword">while</span> (carry != <span class="number">0</span> <span class="keyword">or</span> l1 <span class="keyword">or</span> l2):</span><br><span class="line">            l1_val = l1.val <span class="keyword">if</span> l1 <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line">            l2_val = l2.val <span class="keyword">if</span> l2 <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line">            curr.next = ListNode(carry)</span><br><span class="line">            curr = curr.next</span><br><span class="line">            carry,curr.val = divmod(carry + l1_val + l2_val,<span class="number">10</span>)</span><br><span class="line">            l1 = l1.next <span class="keyword">if</span> l1 <span class="keyword">else</span> <span class="literal">None</span></span><br><span class="line">            l2 = l2.next <span class="keyword">if</span> l2 <span class="keyword">else</span> <span class="literal">None</span></span><br><span class="line">        <span class="keyword">return</span> res.next</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>复杂度分析</p>
+<p>时间复杂度: O(max(m,n))</p>
+<p>空间复杂度: O(max(m,n))</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/algorithm/">algorithm</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Hadoop集群搭建" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/09/14/Hadoop集群搭建/" class="article-date">
+      <time datetime="2019-09-14T03:53:48.471Z" itemprop="datePublished">2019-09-14</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2019/09/14/Hadoop集群搭建/">Hadoop集群搭建</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <blockquote>
+<p>安装一台vmware虚拟机</p>
+<ul>
+<li>系统版本: centos7.0</li>
+</ul>
+</blockquote>
+<ol>
+<li><p><strong>关闭防火墙和SELINUX</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#关闭防火墙</span><br><span class="line">systemctl stop firewalld.service</span><br><span class="line">#禁止开机启动</span><br><span class="line">systemctl disable firewalld.service</span><br><span class="line">#关闭selinux</span><br><span class="line">vi /etc/sysconfig/selinux</span><br><span class="line">#修改#SELINUX=enforcing 为</span><br><span class="line">SELINUX=disabled</span><br><span class="line">#保存退出</span><br><span class="line">setenforce 0</span><br></pre></td></tr></table></figure>
+
+<p>务必确保防火墙和selinux关闭,否则会导致许多问题</p>
+</li>
+<li><p><strong>设置静态ip</strong></p>
+<blockquote>
+<p>核心是需要保持这几个地方一致:</p>
+<ol>
+<li>宿主机适配器设置中VMnet8属性中IPv4属性设置:<ul>
+<li>不自动获取IP地址</li>
+<li>ip地址和网关在同一网段,这里我设置为192.168.13.101</li>
+<li>默认网关与首选DNS相同</li>
+</ul>
+</li>
+<li>虚拟机中网关与宿主机VMnet8默认网关相同,自定义IP处于同一网段,即都为1中示例的192.168.13.X,首选DNS与网关相同</li>
+</ol>
+</blockquote>
+<p>2.1 具体设置方法</p>
+<ul>
+<li><p>编辑配置ifcfg-ens33,根据网卡名称,文件名会有变化,可通过<code>ip addr</code>查看<br><code>vi /etc/sysconfig/network-scripts/ifcfg-ens33</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#文件内容</span></span><br><span class="line">TYPE=<span class="string">"Ethernet"</span></span><br><span class="line">BOOTPROTO=<span class="string">"static"</span></span><br><span class="line">IPADDR=<span class="string">"192.168.13.100"</span></span><br><span class="line">NETMASK=<span class="string">"255.255.255.0"</span></span><br><span class="line">GATEWAY=<span class="string">"192.168.13.4"</span><span class="comment">#与宿主机VMnet8的IPv4属性一致</span></span><br><span class="line">NAME=<span class="string">"ens33"</span></span><br><span class="line">DEVICE=<span class="string">"ens33"</span></span><br><span class="line">ONBOOT=<span class="string">"yes"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编辑配置network<br><code>vi /etc/sysconfig/network</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#文件内容</span></span><br><span class="line">NETWORKING=yes</span><br><span class="line">NETWORKING_IPV6=no</span><br><span class="line">HOSTNAME=hadoop01</span><br><span class="line">GATEWAY=192.168.13.4<span class="comment">#与宿主机VMnet8的IPv4属性一致</span></span><br><span class="line">DNS1=192.168.13.4<span class="comment">#与网关一致</span></span><br><span class="line">DNS2=8.8.8.8</span><br><span class="line">DNS3=8.8.4.4</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>新建用户组及赋予root权限</strong> </p>
+<p>3.1 新建用户组</p>
+<ul>
+<li>将hadoop用户加入用户组: <code>usermod -G hadoop hadoop</code></li>
+<li>重置用户密码:``passwd hadoop`</li>
+</ul>
+<p>3.2 赋予root权限</p>
+<ul>
+<li><p>编辑文件/etc/sudoers</p>
+<p>在<code>root ALL=(ALL) ALL</code>下添加一行:<code>hadoop ALL=(ALL) ALL</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root ALL=(ALL) ALL</span><br><span class="line">hadoop ALL=(ALL) ALL</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>hadoop用户若想用root权限执行命令,需要在命令前添加’sudo’,例如<code>sudo touch a.txt</code></p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><strong>克隆虚拟机并修改初始配置</strong> </p>
+<p>a. 通过vmware克隆为3台虚拟机</p>
+<p>b. 开启这三台虚拟机:</p>
+<ul>
+<li>修改/etc/sysconfig/network-scripts/ifcfg-ens3文件,同一网段内,更改ip地址,保证ip不冲突,重启网卡;<br><code>service network restart</code></li>
+<li>修改主机名<code>hostnamectl set -hostname XXX</code> </li>
+</ul>
+<blockquote>
+<p>这里我将三台机器名称设置为hadoop01、hadoop02、hadoop03,ip地址为192.168.13.101、192.168.13.102、192.168.13.103</p>
+</blockquote>
+</li>
+<li><p><strong>安装jdk和hadoop</strong> </p>
+<p>a. 下载linux版本的jdk1.8安装包和apache hadoop2.7.7安装包上传至虚拟机,可以用sftp或者rz,这里不做过多介绍</p>
+<p>b. 创建目录,解压安装包,jdk更推荐安装到/usr/bin下,这是很多程序的默认jdk路径</p>
+<ul>
+<li><code>mkdir /opt/module</code> </li>
+<li><code>tar -zxvf hadoop-2.7.7.tar.gz -C /opt/module/</code> </li>
+<li><code>tar -zxvf jdk1.8XXX.tar.gz -C /opt/module/</code> </li>
+</ul>
+<p>c. 配置环境变量</p>
+<ul>
+<li><code>vi /etc/profile</code>在文件末尾加上如下内容,需要根据实际文件名修改:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#set java environment</span></span><br><span class="line">JAVA_HOME=/opt/module/jdk1.8</span><br><span class="line">JRE_HOME=/opt/module/jdk1.8/jre</span><br><span class="line">CLASS_PATH=.:<span class="variable">$JAVA_HOME</span>/lib/dt.jar:<span class="variable">$JAVA_HOME</span>/lib/tools.jar:<span class="variable">$JRE_HOME</span>/lib</span><br><span class="line">PATH=<span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$JRE_HOME</span>/bin</span><br><span class="line"><span class="built_in">export</span> JAVA_HOME JRE_HOME CLASS_PATH PATH</span><br><span class="line"></span><br><span class="line"><span class="comment">#hadoop home</span></span><br><span class="line"><span class="built_in">export</span> HADOOP_HOME=/opt/module/hadoop-2.7.7</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$HADOOP_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/sbin</span><br></pre></td></tr></table></figure>
+
+<p>d. 各组件程序jdk地址替换</p>
+<blockquote>
+<p>将$HADOOP_HOME/etc/hadoop下的下列程序jdk地址替换</p>
+<ul>
+<li>hadoop-env.sh </li>
+<li>mapred-env.sh</li>
+<li>yarn-env.sh</li>
+</ul>
+</blockquote>
+</li>
+<li><p><strong>配置ssh免密登录</strong> </p>
+<p>a. 本机生成rsa私钥和公钥<code>ssh-keygen -t rsa</code> </p>
+<p>b. 将本机公钥复制到目标服务器目标用户<code>ssh-copy-id 192.168.13.103</code> </p>
+<p>c. 设置主机名和地址映射,这样可以直接用主机名代替ip进行访问和传输文件,好处是以后ip变化时更改ip不会对集群通信产生影响</p>
+<ul>
+<li><code>vi /etc/hosts</code>添加如下内容</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">192.168.13.102 hadoop02</span><br><span class="line">192.168.13.103 hadoop03</span><br><span class="line">192.168.13.104 hadoop04</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>hadoop文件配置</p>
+<p><em>仅作为示例,更多配置需要查看官方文档</em> </p>
+<blockquote>
+<p>自定义配置文件在$HADOOP_HOME/etc/hadoop下</p>
+</blockquote>
+<p>a. core-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 指定HDFS中NameNode的地址 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;hdfs://hadoop01:9000&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 指定Hadoop运行时产生文件的存储目录 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;/opt/module/hadoop-2.7/data/tmp&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>b. hdfs-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 文件副本数 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;3&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 指定Hadoop辅助名称节点主机配置 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hadoop03:50090&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>c. yarn-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Site specific YARN configuration properties --&gt;</span><br><span class="line">    &lt;!-- Reducer获取数据的方式 --&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">            &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span><br><span class="line">            &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- 指定YARN的ResourceManager的地址 --&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">            &lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;</span><br><span class="line">            &lt;value&gt;hadoop02&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>d. mapred-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 指定MR运行在Yarn上 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;yarn&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>同步hadoop和jdk至其他虚拟机</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">scp -r /opt/module hadoop@192.168.13.102:/opt/</span><br><span class="line">scp -r /opt/module hadoop@192.168.13.103:/opt/</span><br><span class="line"><span class="comment">#环境变量同步</span></span><br><span class="line">scp /etc/profile root@192.168.13.103:/etc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ntp时间同步</p>
+<blockquote>
+<ol>
+<li>所有机器安装ntp服务<code>yum -y install ntp</code>,并设置开机启动<code>systemctl ntpd enabled</code> </li>
+<li>修改配置文件/etc/ntp.conf,将主节点机器时间服务器设置为localhost,其他机器以这台机器为时间机器<br>a. 主节点hadoop01配置</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">restrict 192.168.13.0 mask 255.255.255.0 nomodify notrap</span><br><span class="line">#注释或删除下列</span><br><span class="line">#server 0.centos.pool.ntp.org iburst</span><br><span class="line">#server 1.centos.pool.ntp.org iburst</span><br><span class="line">#server 2.centos.pool.ntp.org iburst</span><br><span class="line">#server 3.centos.pool.ntp.org iburst</span><br><span class="line"></span><br><span class="line">server 127.127.1.0</span><br><span class="line">fudge 127.127.1.0 stratum 10</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>修改配置<code>vi /etc/sysconfg/ntpd</code>, 增加内容如下（让硬件时间与系统时间一起同步）</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SYNC_HWCLOCK=yes</span><br></pre></td></tr></table></figure>
+
+<p>b. 从节点配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#server 0.centos.pool.ntp.org iburst</span><br><span class="line">#server 1.centos.pool.ntp.org iburst</span><br><span class="line">#server 2.centos.pool.ntp.org iburst</span><br><span class="line">#server 3.centos.pool.ntp.org iburst</span><br><span class="line">server hadoop01</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动集群</p>
+<blockquote>
+<p>在配置namenode的机器上执行start-dfs.sh,配置yarn的机器上执行start-yarn.sh,jps确认是否正常启动</p>
+</blockquote>
+</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/bigdata/">bigdata</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hadoop/">Hadoop</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Hexo搭建个人博客及多终端同步使用" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
